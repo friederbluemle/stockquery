@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preview.support.v4.app.NotificationManagerCompat;
 import android.preview.support.wearable.notifications.RemoteInput;
@@ -94,7 +95,8 @@ public class MainActivity extends Activity {
                 .setMinPriority()
                 .addRemoteInputForContentIntent(
                         new RemoteInput.Builder(EXTRA_QUERY)
-                                .setLabel(getString(R.string.query)).build())
+                                .setLabel(getString(R.string.query)).build()
+                )
                 .build();
         NotificationManagerCompat.from(this).notify(0, notification);
     }
@@ -103,8 +105,25 @@ public class MainActivity extends Activity {
         String input = intent.getStringExtra(EXTRA_QUERY);
         if (input != null && !input.equals("")) {
             mLastQuery = mResponder.query(input);
-            mLastQuoteView.setText("\n" + input + "\n" + mLastQuery);
+            new FetchItemsTask().execute(mLastQuery);
+        }
+    }
+
+    private class FetchItemsTask extends
+            AsyncTask<String, Void, Stock> {
+
+        @Override
+        protected Stock doInBackground(String... params) {
+            return new WebCall().fetchStock(params[0]);
+        }
+
+        @Override
+        protected void onPostExecute(Stock stock) {
+            super.onPostExecute(stock);
+            mLastQuery = stock.getPrice();
+            mLastQuoteView.setText("\n" + stock.getSymbol() + "\n" + mLastQuery);
             showNotification();
         }
+
     }
 }

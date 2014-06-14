@@ -83,7 +83,8 @@ public class MainActivity extends Activity {
     private void showNotification() {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
                 .setContentTitle(getString(R.string.quote))
-                .setContentText(mLastQuery);
+                .setContentText(mLastQuery)
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.bg_stockquery));
 
         Intent intent = new Intent(ACTION_QUERY);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent,

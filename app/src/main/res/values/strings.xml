@@ -2,7 +2,8 @@
 <resources>
 
     <string name="app_name">StockQuery</string>
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="quote">Quote</string>
+    <string name="query">Query</string>
 
 </resources>

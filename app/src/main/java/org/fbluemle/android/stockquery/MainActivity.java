@@ -127,7 +127,7 @@ public class MainActivity extends Activity {
             if (stock != null) {
                 mLastSymbol = stock.getSymbol();
                 mLastQuote = String.format("%s %s (%s)", stock.getPrice(), stock.getChange(), stock.getPercentChange());
-                mLastQuoteView.setText(String.format("%s\n%s\n", mLastSymbol, mLastQuote));
+                mLastQuoteView.append(String.format("%s\n%s\n", mLastSymbol, mLastQuote));
                 showNotification();
             }
         }

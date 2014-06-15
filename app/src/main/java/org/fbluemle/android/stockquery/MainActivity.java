@@ -51,7 +51,6 @@ public class MainActivity extends Activity {
         registerReceiver(mReceiver, new IntentFilter(ACTION_QUERY));
         if (mLastQuote == null) {
             mLastQuote = "No quote yet.";
-            mLastQuoteView.setText(mLastQuote);
         }
         if (mLastSymbol == null) {
             mLastSymbol = "StockQuery";

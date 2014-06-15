@@ -50,11 +50,11 @@ public class MainActivity extends Activity {
         super.onResume();
         registerReceiver(mReceiver, new IntentFilter(ACTION_QUERY));
         if (mLastQuote == null) {
-            mLastQuote = "";
+            mLastQuote = "No quote yet.";
             mLastQuoteView.setText(mLastQuote);
         }
         if (mLastSymbol == null) {
-            mLastSymbol = "";
+            mLastSymbol = "StockQuery";
         }
         showNotification();
     }

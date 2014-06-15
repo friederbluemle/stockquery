@@ -24,7 +24,8 @@ public class MainActivity extends Activity {
 
     private static final String ACTION_QUERY = "org.fbluemle.android.stockquery.QUERY";
 
-    private String mLastQuery;
+    private String mLastSymbol;
+    private String mLastQuote;
 
     private BroadcastReceiver mReceiver;
     private StockQueryResponder mResponder;
@@ -48,9 +49,12 @@ public class MainActivity extends Activity {
     protected void onResume() {
         super.onResume();
         registerReceiver(mReceiver, new IntentFilter(ACTION_QUERY));
-        if (mLastQuery == null) {
-            mLastQuery = "";
-            mLastQuoteView.setText(mLastQuery);
+        if (mLastQuote == null) {
+            mLastQuote = "";
+            mLastQuoteView.setText(mLastQuote);
+        }
+        if (mLastSymbol == null) {
+            mLastSymbol = "";
         }
         showNotification();
     }
@@ -83,8 +87,8 @@ public class MainActivity extends Activity {
 
     private void showNotification() {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
-                .setContentTitle(getString(R.string.quote))
-                .setContentText(mLastQuery)
+                .setContentTitle(mLastSymbol)
+                .setContentText(mLastQuote)
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.bg_stockquery));
 
         Intent intent = new Intent(ACTION_QUERY);
@@ -104,8 +108,8 @@ public class MainActivity extends Activity {
     private void processQuery(Intent intent) {
         String input = intent.getStringExtra(EXTRA_QUERY);
         if (input != null && !input.equals("")) {
-            mLastQuery = mResponder.query(input);
-            new FetchItemsTask().execute(mLastQuery);
+            mLastQuote = mResponder.query(input);
+            new FetchItemsTask().execute(mLastQuote);
         }
     }
 
@@ -120,10 +124,12 @@ public class MainActivity extends Activity {
         @Override
         protected void onPostExecute(Stock stock) {
             super.onPostExecute(stock);
-            mLastQuery = stock.getPrice();
-            mLastQuoteView.setText("\n" + stock.getSymbol() + "\n" + mLastQuery);
-            showNotification();
+            if (stock != null) {
+                mLastSymbol = stock.getSymbol();
+                mLastQuote = String.format("%s %s (%s)", stock.getPrice(), stock.getChange(), stock.getPercentChange());
+                mLastQuoteView.setText(String.format("%s\n%s\n", mLastSymbol, mLastQuote));
+                showNotification();
+            }
         }
-
     }
 }

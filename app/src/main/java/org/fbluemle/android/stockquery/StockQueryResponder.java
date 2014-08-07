@@ -1,5 +1,7 @@
 package org.fbluemle.android.stockquery;
 
+import java.util.Locale;
+
 public class StockQueryResponder {
     public String query(String input) {
         return getSymbol(input);
@@ -15,7 +17,7 @@ public class StockQueryResponder {
         } else if ("microsoft".equalsIgnoreCase(input)) {
             return "MSFT";
         } else {
-            return input.toUpperCase();
+            return input.toUpperCase(Locale.getDefault());
         }
     }
 }
